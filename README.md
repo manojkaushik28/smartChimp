@@ -65,7 +65,7 @@ Run following commands
 	npm debug `With nodemon in debug mode`
 	npm test `Run the test cases`
 
-	node server/app.js `bydefault run on production`
+	node server/app.js `by default run on development`
 	</code>
 </pre>
 
