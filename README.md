@@ -14,7 +14,7 @@ Samrt-Chimp, it allows:
 	- faceBook Authentication
 	- twitter Authentication
 	- google Authentication
-- User role as `admin` & `user` & `guset`.
+- User role as `admin` & `user` & `guest`.
 - Payslip genrator.
 
 ## API
@@ -46,9 +46,9 @@ Samrt-Chimp, it allows:
 ### Tax Slab Service
 
 ```js
-	- taxCalucation (pass the calender year & anual salary)
-	**** Note **** for now taxslab data is static
-	- Make the `seed paramter true` in `server/confif/environment/development.js` it will load the in Database 
+- taxCalucation (pass the calender year & anual salary)
+** Note for now taxslab data is static ** 
+- Make the `seed paramter true` in `server/confif/environment/development.js` it will load the in Database 
 ```
 
 ### How to run
@@ -82,7 +82,7 @@ following environment variables:
 | Variable             | Default value | Description              |
 | -------------------- | ------------- | ------------------------ |
 | IP                   | 0.0.0.0       | Address to listen on     |
-| PORT                 | 3000          | Port to listen on        |
+| PORT                 | 9000          | Port to listen on        |
 | NODE_ENV             | development   | Application Enviroment   |
 
 ### Command to run in different Enviroment
