@@ -30,6 +30,9 @@ process.on('SIGINT', function() {
 	}); 
 }); 
 
+// Populate DB with sample data of taxSlab
+if(config.seedDB) { require('./config/seed'); }
+
 // Setup server
 var app = express();
 var server = require('http').createServer(app);

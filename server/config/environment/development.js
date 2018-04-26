@@ -9,5 +9,5 @@ module.exports = {
     uri: 'mongodb://localhost/smartchimp-dev'
   },
 
-  seedDB: true
+  seedDB: false
 };

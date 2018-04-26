@@ -14,6 +14,6 @@ router.post('/', auth.isAuthenticated(),controller.create);
 router.put('/:id', auth.isAuthenticated(),auth.hasRole('admin'),controller.update);
 router.patch('/:id', auth.isAuthenticated(),auth.hasRole('admin'),controller.update);
 router.delete('/:id', auth.isAuthenticated(),auth.hasRole('admin'),controller.destroy);
-router.get('/salary-slip/genrate',controller.genrateSalarySlip);
+router.post('/salary-slip/genrate',controller.genrateSalarySlip);
 
 module.exports = router;

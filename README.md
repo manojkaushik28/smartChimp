@@ -1,86 +1,162 @@
-# Accepts
+# Smart-Chimp Employee Service Portal
+======================================
 
 [![NPM version](https://badge.fury.io/js/accepts.svg)](http://badge.fury.io/js/accepts)
-[![Build Status](https://travis-ci.org/expressjs/accepts.svg?branch=master)](https://travis-ci.org/expressjs/accepts)
-[![Coverage Status](https://img.shields.io/coveralls/expressjs/accepts.svg?branch=master)](https://coveralls.io/r/expressjs/accepts)
+[![Build Status](https://travis-ci.org/expressjs/accepts.svg?branch=master)](https://github.com/manojkaushik28/smartChimp)
+[![Coverage Status](https://img.shields.io/coveralls/expressjs/accepts.svg?branch=master)](https://github.com/manojkaushik28/smartChimp)
 
-Higher level content negotation based on [negotiator](https://github.com/federomero/negotiator). Extracted from [koa](https://github.com/koajs/koa) for general use.
+### introduction
 
-In addition to negotatior, it allows:
+Samrt-Chimp, it allows:
 
-- Allows types as an array or arguments list, ie `(['text/html', 'application/json'])` as well as `('text/html', 'application/json')`.
-- Allows type shorthands such as `json`.
-- Returns `false` when no types match
-- Treats non-existent headers as `*`
+- User login
+	- Local Authentication
+	- faceBook Authentication
+	- twitter Authentication
+	- google Authentication
+- User role as `admin` & `user` & `guset`.
+- Payslip genrator.
 
 ## API
 
-### var accept = new Accepts(req)
+### User management api
 
 ```js
-var accepts = require('accepts')
-
-http.createServer(function (req, res) {
-  var accept = accepts(req)
-})
+ * post    /auth/local   ----> Login        
+ * post    /auth/facebook | google | twitter  --- Login & singup         
+ * GET     /api/users           
+ * POST    /api/users    ----> Singup         
+ * GET     /api/users/me ---> get personal infomation         
+ * PUT     /api/users/:id/password ---> Change password         
+ * DELETE  /api/users/:id          
 ```
 
-### accept\[property\]\(\)
-
-Returns all the explicitly accepted content property as an array in descending priority.
-
-- `accept.types()`
-- `accept.encodings()`
-- `accept.charsets()`
-- `accept.languages()`
-
-They are also aliased in singular form such as `accept.type()`. `accept.languages()` is also aliased as `accept.langs()`, etc.
-
-Note: you should almost never do this in a real app as it defeats the purpose of content negotiation.
-
-Example:
+### Employee management api
 
 ```js
-// in Google Chrome
-var encodings = accept.encodings() // -> ['sdch', 'gzip', 'deflate']
+ * GET     /api/employees    -> Get All Employee [pagination is not there](https://www.npmjs.com/package/mongoose-paginate)         
+ * POST    /api/employees    ----> Create Employee         
+ * POST  /api/employees/salary-slip/genrate ->  `Body parameter` content-type will be `application/x-www-form-urlencoded`
+ 	- empName
+ 	- anualSalary        
+ 	- superRate        
+ 	- salaryStartDate        
 ```
 
-Since you probably don't support `sdch`, you should just supply the encodings you support:
+### Tax Slab Service
 
 ```js
-var encoding = accept.encodings('gzip', 'deflate') // -> 'gzip', probably
+	- taxCalucation (pass the calender year & anual salary)
+	**** Note **** for now taxslab data is static
+	- Make the `seed paramter true` in `server/confif/environment/development.js` it will load the in Database 
 ```
 
-### accept\[property\]\(values, ...\)
+### How to run
 
-You can either have `values` be an array or have an argument list of values.
+Run following commands
 
-If the client does not accept any `values`, `false` will be returned.
-If the client accepts any `values`, the preferred `value` will be return.
+<pre>
+	<code>
+	git clone https://github.com/manojkaushik28/smartChimp.git
+	npm install
+	bower install
+	npm start `Without nodemon`
+	npm dev `With nodemon`
+	npm debug `With nodemon in debug mode`
+	npm test `Run the test cases`
 
-For `accept.types()`, shorthand mime types are allowed.
+	node server/app.js `bydefault run on production`
+	</code>
+</pre>
 
-Example:
+### Dependencies
+This application required following connections to run.
+<ol>
+<li>grunt</li>
+</ol>
+
+## Environment variables
+Environment variables is the main mechanism of manipulating application settings. Currently application recognizes
+following environment variables:
+
+| Variable             | Default value | Description              |
+| -------------------- | ------------- | ------------------------ |
+| IP                   | 0.0.0.0       | Address to listen on     |
+| PORT                 | 3000          | Port to listen on        |
+| NODE_ENV             | development   | Application Enviroment   |
+
+### Command to run in different Enviroment
 
 ```js
-// req.headers.accept = 'application/json'
+// in Production
+NODE_ENV=production PORT=80 node server/app.js
 
-accept.types('json') // -> 'json'
-accept.types('html', 'json') // -> 'json'
-accept.types('html') // -> false
+// in development
+NODE_ENV=development PORT=9000 node server/app.js
 
-// req.headers.accept = ''
-// which is equivalent to `*`
+// in testing
+NODE_ENV=testing PORT=9000 node server/app.js
 
-accept.types() // -> [], no explicit types
-accept.types('text/html', 'text/json') // -> 'text/html', since it was first
 ```
+
+### Command With Grunt
+
+### Testing
+
+Running `grunt test` will run the client and server unit tests with karma and mocha.
+
+Use `grunt test:server` to only run server tests.
+
+Use `grunt test:client` to only run client tests.[Test case are not available](https://docs.angularjs.org/guide/unit-testing)
+
+### Environment Variables
+
+Keeping your app secrets and other sensitive information in source control isn't a good idea. To have grunt launch your app with specific environment variables, add them to the git ignored environment config file: `server/config/local.env.js`.
+
+### Build the project
+
+Run `grunt` for building, `grunt serve` for preview, and `grunt serve:dist` for a preview of the built app.
+
+### Project Structure
+
+Overview
+
+```
+├── client
+│   ├── app                 - All of our app specific components go in here
+│   ├── assets              - Custom assets: fonts, images, etc…
+│   ├── components          - Our reusable components, non-specific to to our app
+│
+├── e2e                     - Our protractor end to end tests [Not implmented yet]
+│
+└── server
+    ├── api                 - Our apps server api
+    ├── auth                - For handling authentication with different auth strategies
+    ├── components          - Our reusable or app-wide components
+    ├── config              - Where we do the bulk of our apps configuration
+    │   └── local.env.js    - Keep our environment variables out of source control
+    │   └── environment     - Configuration specific to the node environment
+    └── views               - Server rendered views
+```
+
+An example client component in client/app
+
+```
+employee
+├── employee.js                 - Routes
+├── employee.controller.js      - Controller for our employee route
+├── employee.services.js        - services for our employee route
+├── employee.controller.spec.js - Test
+├── employee.html               - View
+└── employee.css               	- Styles
+```
+
 
 ## License
 
 The MIT License (MIT)
 
-Copyright (c) 2013 Jonathan Ong me@jongleberry.com
+Copyright (c) 2018 Manoj Kaushik manojkaushik28@yahoo.com
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -99,3 +175,5 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
+
+

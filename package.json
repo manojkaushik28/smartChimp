@@ -89,6 +89,7 @@
   },
   "scripts": {
     "start": "node server/app.js",
+    "prod": "nodemon server/app.js",
     "dev": "nodemon server/app.js",
     "debug": "nodemon inspect server/app.js",
     "test": "grunt test",

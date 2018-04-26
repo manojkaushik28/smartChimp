@@ -82,13 +82,12 @@ exports.destroy = (req, res) =>{
   });
 }
 exports.genrateSalarySlip = (req, res) => {
-  const empName = req.query.empName;
-  const anualSalary = req.query.anualSalary;
-  const superRate = req.query.superRate; // percentage not more then 100%
-  const salaryStartDate = req.query.salaryStartDate; // '2018-03-15'
-  taxService.taxCalucation(12000,2018)
+  const empName = req.body.empName;
+  const anualSalary = req.body.anualSalary;
+  const superRate = req.body.superRate; // percentage not more then 100%
+  const salaryStartDate = req.body.salaryStartDate; // '2018-03-15'
+  taxService.taxCalucation(anualSalary,2018)
             .then((taxAmount) => {
-              debugger;
               let taxAmountPerMonth =Math.round(taxAmount/12);
               let superAmountPerMonth =Math.round(anualSalary * superRate /1200);
               let salaryPerMonth =Math.round(anualSalary / 12);
@@ -102,7 +101,6 @@ exports.genrateSalarySlip = (req, res) => {
                           taxAmount:taxAmountPerMonth
                       });
             },(err) => {
-              debugger;
               return handleError(res, err);
             }
   )
