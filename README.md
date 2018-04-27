@@ -73,6 +73,7 @@ Run following commands
 This application required following connections to run.
 <ol>
 <li>grunt</li>
+<li>bower -> to install the bower component</li>  
 </ol>
 
 ## Environment variables
