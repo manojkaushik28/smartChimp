@@ -1,11 +1,11 @@
 'use strict';
 
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
-const crypto = require('crypto');
-const authTypes = ['github', 'twitter', 'facebook', 'google'];
+var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
+var crypto = require('crypto');
+var authTypes = ['github', 'twitter', 'facebook', 'google'];
 
-const UserSchema = new Schema({
+var UserSchema = new Schema({
   name: String,
   email: { type: String, lowercase: true },
   role: {
@@ -19,6 +19,9 @@ const UserSchema = new Schema({
   twitter: {},
   google: {},
   github: {}
+},
+{
+  timestamps: true
 });
 
 /**
@@ -26,12 +29,12 @@ const UserSchema = new Schema({
  */
 UserSchema
   .virtual('password')
-  .set((password) => {
+  .set(function(password) {
     this._password = password;
     this.salt = this.makeSalt();
     this.hashedPassword = this.encryptPassword(password);
   })
-  .get(() => {
+  .get(function() {
     return this._password;
   });
 
@@ -78,9 +81,9 @@ UserSchema
 // Validate email is not taken
 UserSchema
   .path('email')
-  .validate((value, respond) =>{
+  .validate(function(value, respond) {
     var self = this;
-    this.constructor.findOne({email: value}, (err, user) =>{
+    this.constructor.findOne({email: value}, function(err, user) {
       if(err) throw err;
       if(user) {
         if(self.id === user.id) return respond(true);
@@ -126,7 +129,7 @@ UserSchema.methods = {
    * @return {Boolean}
    * @api public
    */
-  authenticate: (plainText) =>{
+  authenticate: function(plainText){
     return this.encryptPassword(plainText) === this.hashedPassword;
   },
 
@@ -136,7 +139,7 @@ UserSchema.methods = {
    * @return {String}
    * @api public
    */
-  makeSalt: () =>{
+  makeSalt: function(){
     return crypto.randomBytes(16).toString('base64');
   },
 
@@ -147,7 +150,7 @@ UserSchema.methods = {
    * @return {String}
    * @api public
    */
-  encryptPassword: (password) =>{
+  encryptPassword: function(password){
     if (!password || !this.salt) return '';
     var salt = new Buffer(this.salt, 'base64');
     return crypto.pbkdf2Sync(password, salt, 10000, 64,'sha1').toString('base64');
